@@ -1,8 +1,29 @@
-const book = require('../models/book.js')
+const Book = require('../models/book.js')
+const Author = require('../models/author.js')
+const BookInstance = require('../models/bookinstance.js')
+const Genre = require('../models/genre.js')
+
 const asyncHandler = require('express-async-handler')
 
 exports.index = asyncHandler(async (req, res, next) => {
-    res.send('Not implemented home page')
+   const [numBook, numBookInstance, availableBookInst, numAuthor, numGenre] = 
+   await Promise.all([
+    Book.countDocuments({}).exec(),
+    Author.countDocuments({}).exec(),
+    BookInstance.countDocuments({}).exec(),
+    Genre.countDocuments({}).exec()
+   ])
+
+   res.render('index', {
+    
+    title: "Local Library home",
+    book_count: numBook,
+    book_instance: numBookInstance,
+    book_instance_available: availableBookInst,
+    author_count: numAuthor,
+    genre_count: numGenre
+
+   })
 })
 
 exports.book_list = asyncHandler(async (req, res, next) => {
