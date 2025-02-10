@@ -11,6 +11,7 @@ exports.index = asyncHandler(async (req, res, next) => {
     Book.countDocuments({}).exec(),
     Author.countDocuments({}).exec(),
     BookInstance.countDocuments({}).exec(),
+    BookInstance.countDocuments({statut: "available"}).exec(),
     Genre.countDocuments({}).exec()
    ])
 
@@ -27,7 +28,13 @@ exports.index = asyncHandler(async (req, res, next) => {
 })
 
 exports.book_list = asyncHandler(async (req, res, next) => {
-    res.send('Not implemented book list')
+
+    const allBook = await Book.find({}, 'title author')
+    .sort({title: 1})
+    .populate('author')
+    .exec()
+
+    res.render('book', {title: 'Book list', book_list: allBook})
 })
 
 exports.book_detail = asyncHandler(async (req, res, next) => {

@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var dotenv = require('dotenv')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -11,8 +12,11 @@ var catalogRouter = require('./routes/catalog');
 
 //Connexion db
 mongoose.set('strictQuery', false);
-// const connexion = mongoose.connect("mongodb+srv://bmfabrice:ATLPaW0rfFR2pdte@bmfabricedb.apmfq.mongodb.net/Local_library")
-const connexion = mongoose.connect("mongodb://localhost:27017/Local_library") 
+dotenv.config()
+const stringDb = process.env.STRING_DB
+const stringCloud = process.env.STRING_CLOUD
+const connexion = mongoose.connect(stringCloud)
+// const connexion = mongoose.connect(stringDb) 
 
 connexion.then(() => console.log('Connnexion db successfull !'))
 .catch(() => console.log('Connexion db échoué !'))
