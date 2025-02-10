@@ -1,9 +1,28 @@
-const genre = require('../models/genre.js')
+const Genre = require('../models/genre.js')
+const Book = require('../models/book.js')
 const asyncHandler = require('express-async-handler')
+const { Promise } = require('mongoose')
 
 
 exports.genre_list = asyncHandler(async (req, res, next) => {
-    res.send('Not implemented genre list')
+
+    const [genre, book_genre] = await Promise.all([
+        Genre.findById(req.params.id).exec(),
+        Book.find({genre: req.params.id}, 'title summary').exec()
+    ])
+
+    if (genre === null) {
+        const err = new Error('Erro not found')
+        err.status = 404
+        next(err)
+    }
+    
+
+    res.render('genre', {
+        title: 'Genre Détail', 
+        genre: genre,
+        genre_in_book: book_genre
+    })
 })
 
 exports.genre_detail = asyncHandler(async (req, res, next) => {

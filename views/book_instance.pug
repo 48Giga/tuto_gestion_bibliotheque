@@ -15,6 +15,6 @@ block content
                     else 
                         span.text-warring #{bookins.status}
                     if bookins.status != "Available"
-                        span (Due: #{bookins.due_bank})
+                        span (Due: #{bookins.due_back_formatted})
     else 
         p There is not book instance
